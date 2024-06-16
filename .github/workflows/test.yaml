@@ -1,0 +1,46 @@
+name: test
+on: [push, pull_request]
+
+jobs:
+  check_fmt:
+    name: "Check Format"
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          # note: fmt only work on Linux
+          - name: "Linux"
+            os: ubuntu-latest
+            zig_version: 0.13.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: ${{ matrix.config.zig_version }}
+      - name: "Check format"
+        run: zig fmt --check *.zig src/*.zig
+
+  build:
+    name: "${{ matrix.config.name }} (zig ${{ matrix.config.zig_version }})"
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          # note: application only works on Windows
+          - name: "Windows"
+            os: windows-latest
+            zig_version: 0.13.0
+          - name: "Windows"
+            os: windows-latest
+            zig_version: master
+    steps:
+      - uses: actions/checkout@v4
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: ${{ matrix.config.zig_version }}
+      - name: "Build and Install"
+        run: zig build
+      - name: "Run Tests"
+        run: zig build test
