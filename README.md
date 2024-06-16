@@ -19,7 +19,7 @@ The `bashsel` tool is used for the `Open in console` feature of Fork to open the
 
 1. Dowload and Unpack [Zig 0.13.0](https://ziglang.org/download/#release-0.13.0).
 2. Add `zig.exe` to your path environment.
-3. Run `build_exe.bat`
+3. Run `zig build --release=fast`
 
 ## Manual Install
 
